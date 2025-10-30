@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19dfedd71911c24bae107aa4fc278fc, type: 3}
+  m_Name: RedSlime
+  m_EditorClassIdentifier: 
+  <Image>k__BackingField: {fileID: 21300000, guid: 7020dcbbf6d2f7540ad42202a0888758, type: 3}
+  <Hp>k__BackingField: 24
+  <AttackPower>k__BackingField: 8
+  EnemyLogic:
+  - rid: 5311186107461009408
+  - rid: 5311186107461009412
+  references:
+    version: 2
+    RefIds:
+    - rid: 5311186107461009408
+      type: {class: EnemyAutoEffect, ns: , asm: Assembly-CSharp}
+      data:
+        Stack: 5
+        <targetMode>k__BackingField:
+          rid: 5311186107461009409
+        <Effect>k__BackingField:
+          rid: 5311186107461009410
+        <Image>k__BackingField: {fileID: 21300000, guid: 69cfa584fd3adfb4f82f09fbcded9144, type: 3}
+    - rid: 5311186107461009409
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5311186107461009410
+      type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damgaeAmount: 5
+    - rid: 5311186107461009412
+      type: {class: EnemyAutoEffect, ns: , asm: Assembly-CSharp}
+      data:
+        Stack: 5
+        <targetMode>k__BackingField:
+          rid: 5311186107461009413
+        <Effect>k__BackingField:
+          rid: 5311186107461009414
+        <Image>k__BackingField: {fileID: 21300000, guid: 72faa9d0bc4b91c41af02f8c94b18bb0, type: 3}
+    - rid: 5311186107461009413
+      type: {class: HeroTM, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5311186107461009414
+      type: {class: AddEnemyStatusEffect, ns: , asm: Assembly-CSharp}
+      data:
+        StatusStacks: 5
+        statusEffectType: 0
