@@ -15,10 +15,12 @@ public class CardHoverSystem : Singleton<CardHoverSystem>
             Debug.Log("IsMoving");
             return;
         }
-        SetTheMoveState(true);
+
+        SetTheMoveState(true);//正在移动
+
         cardViewHover.gameObject.SetActive(true);
-        cardViewHover.SetUp(card);
-        cardViewHover.transform.position = startPos;
+        cardViewHover.SetUp(card);//设置视图的属性
+        cardViewHover.transform.position = startPos;//将视图移动到选取的卡牌位置
         cardViewHover.transform.DOMove(endPos, 0.15f).OnComplete(()=>SetTheMoveState(false));//动画才能看下一张牌
     }
     public void Hide()

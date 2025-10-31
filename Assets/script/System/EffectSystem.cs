@@ -15,7 +15,7 @@ public class EffectSystem : MonoBehaviour
     }
     IEnumerator PerformEffectPerformer(PerformEffectGA performEffectGA)
     {
-        GameAction gameAction = performEffectGA.effect.GetGameAction(performEffectGA.targets,HeroSystem.Instance.heroView);
+        GameAction gameAction = performEffectGA.effect.GetGameAction(performEffectGA.targets,HeroSystem.Instance.heroView);//获取效果的gameAction 相应的performer固定的参数
         ActionSystem.Instance.AddReacion(gameAction);
         yield return null;
         

@@ -8,7 +8,7 @@ using UnityEngine;
 public class EnemySystem : Singleton<EnemySystem>{
     [SerializeField] private EnemyBoard enemyBoardView;
     public List<EnemyView> enemyViews => enemyBoardView.enemyViews;
-    public List<EnemyAutoEffect> enemyAutoEffects = new(99);
+    public List<EnemyAutoEffect> enemyAutoEffects = new();
     void OnEnable()
     {
         ActionSystem.AttachPerformer<EnemyTurnGA>(EnemyTurnPerformer);
@@ -45,20 +45,22 @@ public class EnemySystem : Singleton<EnemySystem>{
         int i = 0;
         foreach (var caster in enemyViews)
         {
-             if (caster.GetStatusEffectStack(StatusEffectType.ARMOR) > 0)
+            if (caster.GetStatusEffectStack(StatusEffectType.ARMOR) > 0)
             {
                 ClearAllStatusGA clearAllStatusGA = new(caster, StatusEffectType.ARMOR);//回合结束取消防御 
                 ActionSystem.Instance.AddReacion(clearAllStatusGA);
             }
+
             if (enemyAutoEffects[i] != null)
             {
-                PlayEnemyLogicGA playEnemyLogicGA = new(caster, enemyAutoEffects[i].targetMode.GetTargets(), enemyAutoEffects[i].Effect);
+                PlayEnemyLogicGA playEnemyLogicGA = new(caster, enemyAutoEffects[i].targetMode.GetTargets(), enemyAutoEffects[i].Effect);//获取应该进行的动作 和敌人的caster相匹配
                 ActionSystem.Instance.AddReacion(playEnemyLogicGA);
                 i++;
             }
         }
-        enemyAutoEffects.Clear();
-        EnemySetNextActionGA enemySetNextActionGA = new();
+        
+        enemyAutoEffects.Clear();//防止下一次获取事件会出问题
+        EnemySetNextActionGA enemySetNextActionGA = new();//获取事件
         ActionSystem.Instance.AddReacion(enemySetNextActionGA);
         yield return null;
     }
@@ -76,22 +78,26 @@ public class EnemySystem : Singleton<EnemySystem>{
             int burnStacks = enemyview.GetStatusEffectStack(StatusEffectType.BURN);
             if (burnStacks > 0)
             {
-                BurnTargetGA burnTargetGA = new(burnStacks, enemyview);
+                BurnTargetGA burnTargetGA = new(burnStacks, enemyview);//计算烧伤
                 ActionSystem.Instance.AddReacion(burnTargetGA);
             }
         }
     }
-    private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
+    private void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)//敌人回合结束
     {
         int i = 0;
         foreach (var caster in enemyViews)
         {
-            ShowEnemyNextActionGA showEnemyNextActionGA = new(enemyAutoEffects[i].Image, caster, enemyAutoEffects[i].Stack.ToString());
+            ShowEnemyNextActionGA showEnemyNextActionGA = new(enemyAutoEffects[i].Image, caster, enemyAutoEffects[i].Stack.ToString());//加载每一个敌人得应该做得逻辑
             ActionSystem.Instance.AddReacion(showEnemyNextActionGA);
             i++;
-            if (caster.GetStatusEffectStack(StatusEffectType.Vulner) > 0) {
+
+            //去除防御
+            if (caster.GetStatusEffectStack(StatusEffectType.Vulner) > 0)
+            {
                 caster.RemoveStatusEffect(StatusEffectType.Vulner, 1);
             }
+            
         }
     }
     
@@ -99,7 +105,7 @@ public class EnemySystem : Singleton<EnemySystem>{
     private void SystemStartPreReation(SystemStartGA systemStartGA)
     {
         EnemySetNextActionGA enemySetNextActionGA = new();//获取开局行为
-        ActionSystem.Instance.AddReacion(enemySetNextActionGA);
+        ActionSystem.Instance.AddReacion(enemySetNextActionGA);//设定该做的gameaction
     }
     private void SystemStartPostReation(SystemStartGA systemStartGA)
     {
@@ -114,16 +120,18 @@ public class EnemySystem : Singleton<EnemySystem>{
  
    
    
-    private IEnumerator PlayEnemyLogicPerformer(PlayEnemyLogicGA playEnemyLogicGA)
+    private IEnumerator PlayEnemyLogicPerformer(PlayEnemyLogicGA playEnemyLogicGA)//执行敌人逻辑的performer
     {
         CombatantView attacker = playEnemyLogicGA.Caster;
-           Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
-            yield return tween.WaitForCompletion();//等待动画完成
-            attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
+
+        Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
+        yield return tween.WaitForCompletion();//等待动画完成
+
+        attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
+        
         foreach (var target in playEnemyLogicGA.targets)
         {
-               
-            GameAction gameAction = playEnemyLogicGA.effect.GetGameAction(new() { target }, playEnemyLogicGA.Caster);
+            GameAction gameAction = playEnemyLogicGA.effect.GetGameAction(new() { target }, playEnemyLogicGA.Caster);//像是需要进行什么的全写在效果中了 效果对应得 事件初始化就是需要 target和caster
             ActionSystem.Instance.AddReacion(gameAction);
             yield return null;
         }
@@ -131,7 +139,7 @@ public class EnemySystem : Singleton<EnemySystem>{
     private IEnumerator ShowEnemyNextActionPerformer(ShowEnemyNextActionGA showEnemyNextActionGA)
     {
         EnemyView caster = showEnemyNextActionGA.Caster;//获取完意图就开始加载
-        caster.UpdateNextActionText(showEnemyNextActionGA.Image, showEnemyNextActionGA.stack);
+        caster.UpdateNextActionText(showEnemyNextActionGA.Image, showEnemyNextActionGA.stack);//写的不好 应该和其他的匹配在此处就处理完所有敌人的逻辑而不是在外面写
         Debug.Log(enemyAutoEffects.Count);
         yield return null;
     }
@@ -140,7 +148,7 @@ public class EnemySystem : Singleton<EnemySystem>{
     {
         foreach (var enemyview in enemyBoardView.enemyViews)
         {
-            EnemyAutoEffect autoTargetEffect = EnemyChooseLogicSystem.Instance.ChooseCurrentEnemyLogic(enemyview);//每次敌人回合结束后就开始获取敌人的下回合行动意图
+            EnemyAutoEffect autoTargetEffect = EnemyChooseLogicSystem.Instance.ChooseCurrentEnemyLogic(enemyview);//每次敌人回合结束后就开始获取敌人的下回合行动意图//后续可更改到敌人是否选择随机还是顺序
             enemyAutoEffects.Add(autoTargetEffect);
         }
         yield return null;

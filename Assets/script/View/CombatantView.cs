@@ -18,7 +18,7 @@ public class CombatantView : MonoBehaviour
     {
         MaxHp = CurrentHp= Hp;
         spriteRenderer.sprite = image;
-        UpdateHPText();
+        UpdateHPText();//加载血量
     }
     protected void UpdateHPText()
     {
@@ -29,12 +29,12 @@ public class CombatantView : MonoBehaviour
         int remainingDamage = DamageAmount;
         if (GetStatusEffectStack(StatusEffectType.Vulner) > 0)
         {
-            remainingDamage = (remainingDamage * GameParameters.Vulnerability)/100;
+            remainingDamage = (remainingDamage * GameParameters.Vulnerability)/100;//计算易伤效果 
         }
         int CurrentArrom = GetStatusEffectStack(StatusEffectType.ARMOR);
-        if (CurrentArrom >= remainingDamage)
+        if (CurrentArrom >= remainingDamage)//计算防与伤害
         {
-            RemoveStatusEffect(StatusEffectType.ARMOR, remainingDamage);
+        RemoveStatusEffect(StatusEffectType.ARMOR, remainingDamage);
            remainingDamage = 0;
         }
         else
@@ -43,7 +43,7 @@ public class CombatantView : MonoBehaviour
             remainingDamage -= CurrentArrom;
         }
 
-        if (remainingDamage > 0)
+        if (remainingDamage > 0)//若是仍存在数值在计算
         {
             CurrentHp -= remainingDamage;
             if (CurrentHp < 0)
@@ -51,18 +51,20 @@ public class CombatantView : MonoBehaviour
                 CurrentHp = 0;
             }
         }
+
         transform.DOShakePosition(0.2f, 0.5f);
-        UpdateHPText();
+        
+        UpdateHPText();//处理伤害的逻辑
     }
     public void AddStatusEffect(StatusEffectType statusEffectType, int stackCount)
     {
         if (statusEffects.ContainsKey(statusEffectType))
         {
-            statusEffects[statusEffectType] += stackCount;
+            statusEffects[statusEffectType] += stackCount;//若是已经存在键 就可以依照键直接加减
         }
         else
         {
-            statusEffects.Add(statusEffectType, stackCount);
+            statusEffects.Add(statusEffectType, stackCount);//若是没有 便加一个进去
         }
         statusEffectsUI.UpdateStatusEffectUI(statusEffectType, GetStatusEffectStack(statusEffectType));
     }
@@ -77,7 +79,7 @@ public class CombatantView : MonoBehaviour
 
             }
         }
-        statusEffectsUI.UpdateStatusEffectUI(statusEffectType, GetStatusEffectStack(statusEffectType));
+        statusEffectsUI.UpdateStatusEffectUI(statusEffectType, GetStatusEffectStack(statusEffectType));//此处计算的数值和ui上显示的是分开的 
     }
     public int GetStatusEffectStack(StatusEffectType type)
     {

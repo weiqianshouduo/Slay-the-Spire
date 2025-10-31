@@ -6,7 +6,7 @@ using UnityEngine;
 public class CostSystem : Singleton<CostSystem>
 {
     [SerializeField] private CostUI costUI;
-    private const int MAX_COST = 3;
+    private const int MAX_COST = 3;//满费用 后续会修改便于修改最大费用
     private int currentCost = MAX_COST;
     void OnEnable()
     {
@@ -24,14 +24,14 @@ public class CostSystem : Singleton<CostSystem>
 
     private IEnumerator SpendCostPerformer(SpendCostGA spendCostGA)
     {
-        currentCost -= spendCostGA.Amount;
+        currentCost -= spendCostGA.Amount;//减费
         costUI.UpdateCostText(currentCost);
         yield return null;
     }
     private IEnumerator RefillCostPerformer(RefillCostGA refillCostGA)
     {
-        currentCost = MAX_COST;
-        costUI.UpdateCostText(currentCost);
+        currentCost = MAX_COST;//回费 后续可添加回费效果的卡牌 需重新写一个
+        costUI.UpdateCostText(currentCost); 
         yield return null;
     }
     public bool HasEnoughCost(int cost)

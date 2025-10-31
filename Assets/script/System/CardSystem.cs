@@ -73,7 +73,7 @@ public class CardSystem :Singleton<CardSystem>
         }
         hand.Clear();
     }
-    private IEnumerator DrawCard()
+    private IEnumerator DrawCard()//用于抽卡
     {
         Card card = drawPile.Draw();//抽牌堆返回card
         hand.Add(card);//手牌列表添加
@@ -86,12 +86,14 @@ public class CardSystem :Singleton<CardSystem>
         drawPile.AddRange(discardPile);//将弃牌区的重新洗牌添加到抽牌区
         discardPile.Clear();
     }
-    private IEnumerator DiscardCard(CardView cardView)
+    private IEnumerator DiscardCard(CardView cardView)//丢弃卡牌
     {
          discardPile.Add(cardView.card);//将牌添加到丢牌区
         cardView.transform.DOScale(Vector3.zero, .15f);//将手牌缩小
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, .15f);//移动手牌
+
         UpdateCardPile();
+
         yield return tween.WaitForCompletion();//暂停当前协程的执行，等待 DOTween 动画完成后再继续执行后续代码
         Destroy(cardView.gameObject);
     }
@@ -99,23 +101,23 @@ public class CardSystem :Singleton<CardSystem>
     {
         hand.Remove(playGardGA.card);//将卡牌移除手卡
         CardView cardView = handView.RemoveCard(playGardGA.card);//执行移除动画和视图
-        yield return DiscardCard(cardView);
+        yield return DiscardCard(cardView);//丢牌
 
-        SpendCostGA spendCostGA = new(playGardGA.card.Cost);
+        SpendCostGA spendCostGA = new(playGardGA.card.Cost);//消耗费用
         ActionSystem.Instance.AddReacion(spendCostGA);
 
         if (playGardGA.card.ManualTargeteffect != null)
         {
             foreach (var effect in playGardGA.card.ManualTargeteffect)
             {
-                PerformEffectGA performEffectGA = new(effect, new() { playGardGA.ManualTarget });
+                PerformEffectGA performEffectGA = new(effect, new() { playGardGA.ManualTarget });//执行卡牌的主动选取效果
                 ActionSystem.Instance.AddReacion(performEffectGA);
             }
         }
 
         foreach (var effectWrapper in playGardGA.card.OtherEffects)
         {
-            List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
+            List<CombatantView> targets = effectWrapper.targetMode.GetTargets();//执行卡牌的自动选取的效果
             PerformEffectGA performEffectGA = new(effectWrapper.Effect, targets);
             ActionSystem.Instance.AddReacion(performEffectGA);
         }

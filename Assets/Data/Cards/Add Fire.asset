@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: add 5 fire all
   cost: 3
-  Image: {fileID: 21300000, guid: 1e181f1c827ad6e4fbc5ec74cd033084, type: 3}
+  Image: {fileID: -1360319688, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
   <ManualTargetEffect>k__BackingField:
   - rid: 5311186111031148547
   - rid: 5311186111031148548

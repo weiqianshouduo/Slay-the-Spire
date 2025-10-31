@@ -16,17 +16,27 @@ public class DamageSystem : MonoBehaviour
         ActionSystem.DetachPerformer<DealDamageGA>();
         ActionSystem.DetachPerformer<DealStatusDamageGA>();
     }
+    //DealDamgeGA的执行者
     private IEnumerator DealDamgePerformer(DealDamageGA dealDamageGA)
     {
         CombatantView attacker = dealDamageGA.Caster;
         foreach (var combatantView in dealDamageGA.Targets)
         {
-             Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
+            int Damage = dealDamageGA.Damage;
+            if (attacker.GetStatusEffectStack(StatusEffectType.Strength) > 0)
+            {
+                Damage += attacker.GetStatusEffectStack(StatusEffectType.Strength);//计算力量增加的攻击力
+            }
+             //处理动画
+            Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
             yield return tween.WaitForCompletion();//等待动画完成
+            
             attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
-            combatantView.Damage(dealDamageGA.Damage);//处理伤害
+            combatantView.Damage(Damage);//处理伤害
+            
             Instantiate(damageVFX, combatantView.transform.position, Quaternion.identity);//创造一个特效预制体在这里
             yield return new WaitForSeconds(0.15f);
+            //处理死亡逻辑
             if (combatantView.CurrentHp <= 0)
             {
                 if (combatantView is EnemyView enemyView)
@@ -45,7 +55,7 @@ public class DamageSystem : MonoBehaviour
     }
     private IEnumerator DealStatusDamagePerformer(DealStatusDamageGA dealStatusDamageGA)
     {
-        CombatantView target = dealStatusDamageGA.target;
+        CombatantView target = dealStatusDamageGA.target;//计算 Stats所造成的伤害
         target.Damage(dealStatusDamageGA.Damage);
         if (target.CurrentHp <= 0)
         {
@@ -55,8 +65,9 @@ public class DamageSystem : MonoBehaviour
                 ActionSystem.Instance.AddReacion(killEnemyGA);
             }
             else
-            {
-                //人物死亡逻辑
+            { 
+                KillHeroGA killHeroGA = new();
+                ActionSystem.Instance.AddReacion(killHeroGA);
             }
 
         yield return null;

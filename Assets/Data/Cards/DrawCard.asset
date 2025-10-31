@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: 'Draw 2 cards '
   cost: 0
-  Image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  Image: {fileID: 1487364129, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
   <ManualTargetEffect>k__BackingField: []
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:

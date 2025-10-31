@@ -405,9 +405,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusEffectUIPrefab: {fileID: 116466179262539680, guid: ae1eea13f934c224eb08318dd80ae9fb, type: 3}
-  armorSprite: {fileID: 21300000, guid: 72faa9d0bc4b91c41af02f8c94b18bb0, type: 3}
-  burnSprite: {fileID: 21300000, guid: 1e181f1c827ad6e4fbc5ec74cd033084, type: 3}
-  VulnerSprite: {fileID: 21300000, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
+  armorSprite: {fileID: 281222209, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  burnSprite: {fileID: -1950394, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  VulnerSprite: {fileID: -591911314, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  StrengthSprite: {fileID: -583925579, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
 --- !u!114 &9016531189836244800
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,11 +12,8 @@ public class PerksUI : MonoBehaviour
     public void AddPerkUI(Perk perk)
     {
         PerkUI perkUI = Instantiate(perkUIPrefab, transform);
-        Debug.Log(12);
-        perkUI.SetUp(perk);
-         Debug.Log(123);
+        perkUI.SetUp(perk);//…Ë∂®perk
         perkUIs.Add(perkUI);
-         Debug.Log(1234);
     }
     public void RemovePerkUI(Perk perk)
     {

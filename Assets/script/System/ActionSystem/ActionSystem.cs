@@ -28,15 +28,19 @@ public class ActionSystem : Singleton<ActionSystem>
         reactions?.Add(gameAction);
             }
     public IEnumerator Flow(GameAction action, Action OnFlowFinished = null){
-        reactions = action.PerformReactions;
+
+        reactions = action.PreReactions;
         PerformSubscribes(action, preSubs);
         yield return PerformReaction();
-        reactions = action.PreReactions;
+        
+        reactions = action.PerformReactions;
         yield return PerformPerformer(action);
         yield return PerformReaction();
+
         reactions = action.PostformReactions;
         PerformSubscribes(action, postSubs);
         yield return PerformReaction();
+
         OnFlowFinished?.Invoke();
     }
     private void PerformSubscribes(GameAction action, Dictionary<Type, List<Action<GameAction>>> subs)

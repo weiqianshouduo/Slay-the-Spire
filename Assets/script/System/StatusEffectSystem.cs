@@ -23,13 +23,13 @@ public class StatusEffectSystem : MonoBehaviour
     {
         foreach (var target in addStatusEffectGA.Targets)
         {
-            target.AddStatusEffect(addStatusEffectGA.type, addStatusEffectGA.stackCount);
+            target.AddStatusEffect(addStatusEffectGA.type, addStatusEffectGA.stackCount);//敌人视图里面的添加逻辑
             yield return null;
         }
     }
     private IEnumerator AddEnemyStatusPerformer(AddEnemyStatusGA addEnemyStatusGA)
     {
-        addEnemyStatusGA.me.AddStatusEffect(addEnemyStatusGA.type, addEnemyStatusGA.Stacks);
+        addEnemyStatusGA.me.AddStatusEffect(addEnemyStatusGA.type, addEnemyStatusGA.Stacks);//就是添加到caster的属性
         yield return null;
     }
     private IEnumerator ClearAllStatusPerformer(ClearAllStatusGA clearAllStatusGA)

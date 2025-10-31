@@ -9,9 +9,8 @@ public class ManualTargetSystem : Singleton<ManualTargetSystem>
     [SerializeField] private LayerMask targetLayerMask;//敌人的层
     public void StartTargeting(Vector3 startPos)
     {
-        arrowView.gameObject.SetActive(true);
+        arrowView.gameObject.SetActive(false);
         arrowView.SetUpArrow(startPos);
-
     }
     public EnemyView EndTargeting(Vector3 endPos)
     {
@@ -19,7 +18,7 @@ public class ManualTargetSystem : Singleton<ManualTargetSystem>
         RaycastHit2D hit = Physics2D.Raycast(endPos, Vector2.right, 1f, targetLayerMask);
         if (hit && hit.collider != null && hit.transform.TryGetComponent(out EnemyView enemyView))//向右发射一个单位的线段进行检测是否为目标层
         {
-            return enemyView;
+            return enemyView;//获取到敌人
         }
         return null;
 

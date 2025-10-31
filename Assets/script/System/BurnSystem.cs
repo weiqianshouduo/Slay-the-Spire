@@ -16,10 +16,12 @@ public class BurnSystem : MonoBehaviour
     }
     private IEnumerator BurnTargetPerform(BurnTargetGA burnTargetGA)
     {
-        CombatantView target = burnTargetGA.target;
-        Instantiate(burnFX, target.transform);
+        CombatantView target = burnTargetGA.target;//获取敌人
+        Instantiate(burnFX, target.transform);//施法特效
+        //处理 伤害
         DealStatusDamageGA dealStatusDamageGA = new(burnTargetGA.burnDamage, target);
         ActionSystem.Instance.AddReacion(dealStatusDamageGA);
+        
         target.RemoveStatusEffect(StatusEffectType.BURN, 1);
         yield return new WaitForSeconds(.1f);
     }
