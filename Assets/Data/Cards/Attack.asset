@@ -10,24 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e91a42e590449964686fd2282481aa30, type: 3}
-  m_Name: Add Fire
+  m_Name: Attack
   m_EditorClassIdentifier: 
-  Description: add 5 fire all
-  cost: 3
+  Description: Attack 5 damage
+  cost: 1
   Image: {fileID: 21300000, guid: 1e181f1c827ad6e4fbc5ec74cd033084, type: 3}
   <ManualTargetEffect>k__BackingField:
-  - rid: 5311186111031148547
-  - rid: 5311186111031148548
+  - rid: 5311186111031148549
   <OtherEffects>k__BackingField: []
   references:
     version: 2
     RefIds:
-    - rid: 5311186111031148547
-      type: {class: AddEnemyStatusEffect, ns: , asm: Assembly-CSharp}
-      data:
-        StatusStacks: 3
-        statusEffectType: 2
-    - rid: 5311186111031148548
+    - rid: 5311186111031148549
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         damgaeAmount: 5

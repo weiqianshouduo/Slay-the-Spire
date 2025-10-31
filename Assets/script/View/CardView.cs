@@ -47,20 +47,19 @@ public class CardView : MonoBehaviour
     void OnMouseUp()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
+
         bool hit = Physics2D.Raycast(
         transform.position,       // ??????????2D???
         Vector2.right,            // ?????2D????right=X????up=Y????
         10,                      // ???????10??
         dropLayMask               // ????????????????
         );
-        if(card.ManualTargeteffect != null)
+
+        if(card.ManualTargeteffect.Count>0)
         {
-            Debug.Log(1);
             EnemyView target = ManualTargetSystem.Instance.EndTargeting(MouseUtil.GetMousePositionInWorldSpace());//?????enemyview
-              Debug.Log(2);
             if(target!= null && CostSystem.Instance.HasEnoughCost(card.Cost))
             {
-                  Debug.Log(3);
                 PlayCardGA playCardGA = new(card,target);
                 ActionSystem.Instance.Perform(playCardGA);
             }
@@ -85,7 +84,8 @@ public class CardView : MonoBehaviour
     void OnMouseDown()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        if(card.ManualTargeteffect!= null)
+
+        if(card.ManualTargeteffect.Count> 0)
         {
             ManualTargetSystem.Instance.StartTargeting(transform.position);//??????????
         }
@@ -104,7 +104,7 @@ public class CardView : MonoBehaviour
     void OnMouseDrag()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        if (card.ManualTargeteffect != null) return;
+        if (card.ManualTargeteffect.Count > 0) return;
         transform.position = MouseUtil.GetMousePositionInWorldSpace(-1);
         
     }

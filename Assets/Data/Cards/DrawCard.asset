@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: DrawCard
   m_EditorClassIdentifier: 
   Description: 'Draw 2 cards '
-  cost: 2
+  cost: 0
   Image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  <ManualTargetEffect>k__BackingField:
-    rid: -2
+  <ManualTargetEffect>k__BackingField: []
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
       rid: 5311186041786335239
@@ -25,8 +24,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 5311186041786335239
       type: {class: NoTM, ns: , asm: Assembly-CSharp}
       data: 

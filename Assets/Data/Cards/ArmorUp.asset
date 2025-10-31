@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e91a42e590449964686fd2282481aa30, type: 3}
   m_Name: ArmorUp
   m_EditorClassIdentifier: 
-  Description: get 10 armor
+  Description: get 5 armor
   cost: 0
   Image: {fileID: 21300000, guid: 32700198561e47044863cf80370fe63a, type: 3}
-  <ManualTargetEffect>k__BackingField:
-    rid: -2
+  <ManualTargetEffect>k__BackingField: []
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
       rid: 5311186062844887046
@@ -25,13 +24,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 5311186062844887046
       type: {class: HeroTM, ns: , asm: Assembly-CSharp}
       data: 
     - rid: 5311186062844887047
       type: {class: AddStatusEffect, ns: , asm: Assembly-CSharp}
       data:
-        stackCount: 10
+        stackCount: 5
         statusEffectType: 0

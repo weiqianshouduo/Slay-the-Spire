@@ -45,6 +45,11 @@ public class EnemySystem : Singleton<EnemySystem>{
         int i = 0;
         foreach (var caster in enemyViews)
         {
+             if (caster.GetStatusEffectStack(StatusEffectType.ARMOR) > 0)
+            {
+                ClearAllStatusGA clearAllStatusGA = new(caster, StatusEffectType.ARMOR);//回合结束取消防御 
+                ActionSystem.Instance.AddReacion(clearAllStatusGA);
+            }
             if (enemyAutoEffects[i] != null)
             {
                 PlayEnemyLogicGA playEnemyLogicGA = new(caster, enemyAutoEffects[i].targetMode.GetTargets(), enemyAutoEffects[i].Effect);
@@ -84,6 +89,9 @@ public class EnemySystem : Singleton<EnemySystem>{
             ShowEnemyNextActionGA showEnemyNextActionGA = new(enemyAutoEffects[i].Image, caster, enemyAutoEffects[i].Stack.ToString());
             ActionSystem.Instance.AddReacion(showEnemyNextActionGA);
             i++;
+            if (caster.GetStatusEffectStack(StatusEffectType.Vulner) > 0) {
+                caster.RemoveStatusEffect(StatusEffectType.Vulner, 1);
+            }
         }
     }
     
@@ -108,8 +116,13 @@ public class EnemySystem : Singleton<EnemySystem>{
    
     private IEnumerator PlayEnemyLogicPerformer(PlayEnemyLogicGA playEnemyLogicGA)
     {
+        CombatantView attacker = playEnemyLogicGA.Caster;
+           Tween tween = attacker.transform.DOMoveX(attacker.transform.position.x - 1f, 0.15f);
+            yield return tween.WaitForCompletion();//等待动画完成
+            attacker.transform.DOMoveX(attacker.transform.position.x + 1f, 0.25f);
         foreach (var target in playEnemyLogicGA.targets)
         {
+               
             GameAction gameAction = playEnemyLogicGA.effect.GetGameAction(new() { target }, playEnemyLogicGA.Caster);
             ActionSystem.Instance.AddReacion(gameAction);
             yield return null;

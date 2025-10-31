@@ -10,18 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e91a42e590449964686fd2282481aa30, type: 3}
-  m_Name: fire
+  m_Name: Addys
   m_EditorClassIdentifier: 
-  Description: a fire
-  cost: 1
-  Image: {fileID: 21300000, guid: 1e181f1c827ad6e4fbc5ec74cd033084, type: 3}
+  Description: Add 50
+  cost: 2
+  Image: {fileID: 21300000, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
   <ManualTargetEffect>k__BackingField:
-    rid: 5311186062844887040
+  - rid: 5311186111031148550
+  - rid: 5311186111031148551
   <OtherEffects>k__BackingField: []
   references:
     version: 2
     RefIds:
-    - rid: 5311186062844887040
+    - rid: 5311186111031148550
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
-        damgaeAmount: 5
+        damgaeAmount: 8
+    - rid: 5311186111031148551
+      type: {class: AddStatusEffect, ns: , asm: Assembly-CSharp}
+      data:
+        stackCount: 2
+        statusEffectType: 2

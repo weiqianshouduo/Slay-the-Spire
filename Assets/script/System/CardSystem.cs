@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Cryptography;
 using DG.Tweening;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class CardSystem :Singleton<CardSystem>
     private readonly List<Card> drawPile = new();//抽牌区
     private readonly List<Card> discardPile = new();//弃牌区
     private readonly List<Card> hand = new();//手牌区 
+    public TMP_Text drawCardPile;
+    public TMP_Text disCardPile;
     void OnEnable()
     {
         ActionSystem.AttachPerformer<DrawCardGA>(DrawCardPerformer);
@@ -50,7 +53,7 @@ public class CardSystem :Singleton<CardSystem>
         if (notDrawAmount > 0)
         {
             RefillDeck();//补充牌库 
-            for(int i = 0; i < notDrawAmount; i++)
+            for (int i = 0; i < notDrawAmount; i++)
             {
                 if (!(drawPile.Count == 0 && discardPile.Count == 0))
                 {
@@ -58,13 +61,13 @@ public class CardSystem :Singleton<CardSystem>
                 }
             }
         }
+        
 
     }
     private IEnumerator DiscardAllPerformer(DisAllCardsGA disAllCardsGA)
     {
         foreach (var card in hand)
-        {
-           
+        {  
             CardView cardView = handView.RemoveCard(card);
             yield return DiscardCard(cardView);
         }
@@ -74,6 +77,7 @@ public class CardSystem :Singleton<CardSystem>
     {
         Card card = drawPile.Draw();//抽牌堆返回card
         hand.Add(card);//手牌列表添加
+        UpdateCardPile();
         CardView cardView = CardViewCreator.Instance.CreateCardView(card, drawCardPoint.position, Quaternion.identity);
         yield return handView.AddCard(cardView);//可视手牌添加到手牌
     }
@@ -87,13 +91,13 @@ public class CardSystem :Singleton<CardSystem>
          discardPile.Add(cardView.card);//将牌添加到丢牌区
         cardView.transform.DOScale(Vector3.zero, .15f);//将手牌缩小
         Tween tween = cardView.transform.DOMove(discardPilePoint.position, .15f);//移动手牌
+        UpdateCardPile();
         yield return tween.WaitForCompletion();//暂停当前协程的执行，等待 DOTween 动画完成后再继续执行后续代码
         Destroy(cardView.gameObject);
     }
     private IEnumerator PlayCardPerformer(PlayCardGA playGardGA)
     {
         hand.Remove(playGardGA.card);//将卡牌移除手卡
-        discardPile.Add(playGardGA.card);//添加到弃牌区
         CardView cardView = handView.RemoveCard(playGardGA.card);//执行移除动画和视图
         yield return DiscardCard(cardView);
 
@@ -102,18 +106,32 @@ public class CardSystem :Singleton<CardSystem>
 
         if (playGardGA.card.ManualTargeteffect != null)
         {
-            PerformEffectGA performEffectGA = new(playGardGA.card.ManualTargeteffect, new() { playGardGA.ManualTarget });
-            ActionSystem.Instance.AddReacion(performEffectGA);
+            foreach (var effect in playGardGA.card.ManualTargeteffect)
+            {
+                PerformEffectGA performEffectGA = new(effect, new() { playGardGA.ManualTarget });
+                ActionSystem.Instance.AddReacion(performEffectGA);
+            }
         }
-        
-        foreach(var effectWrapper in playGardGA.card.OtherEffects)
+
+        foreach (var effectWrapper in playGardGA.card.OtherEffects)
         {
             List<CombatantView> targets = effectWrapper.targetMode.GetTargets();
-            PerformEffectGA performEffectGA = new(effectWrapper.Effect,targets);
+            PerformEffectGA performEffectGA = new(effectWrapper.Effect, targets);
             ActionSystem.Instance.AddReacion(performEffectGA);
         }
         // 卡牌效果
     }
-
-    
+    public List<Card> ReturnDarwCard()
+    {
+        return drawPile;
+    }
+    public List<Card> ReturnDisCard()
+    {
+        return discardPile;
+    }
+    void UpdateCardPile()
+    {
+        drawCardPile.text = drawPile.Count.ToString();
+        disCardPile.text = discardPile.Count.ToString();
+    }
 }

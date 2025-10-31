@@ -23,11 +23,14 @@ public class CombatantView : MonoBehaviour
     protected void UpdateHPText()
     {
         hpText.text = "Hp" + CurrentHp.ToString();
-        
     }
     public void Damage(int DamageAmount)
     {
         int remainingDamage = DamageAmount;
+        if (GetStatusEffectStack(StatusEffectType.Vulner) > 0)
+        {
+            remainingDamage = (remainingDamage * GameParameters.Vulnerability)/100;
+        }
         int CurrentArrom = GetStatusEffectStack(StatusEffectType.ARMOR);
         if (CurrentArrom >= remainingDamage)
         {

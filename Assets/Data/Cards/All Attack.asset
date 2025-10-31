@@ -15,8 +15,7 @@ MonoBehaviour:
   Description: attack all enemy
   cost: 1
   Image: {fileID: 21300000, guid: 69cfa584fd3adfb4f82f09fbcded9144, type: 3}
-  <ManualTargetEffect>k__BackingField:
-    rid: -2
+  <ManualTargetEffect>k__BackingField: []
   <OtherEffects>k__BackingField:
   - <targetMode>k__BackingField:
       rid: 5311186041786335235
@@ -25,8 +24,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 5311186041786335235
       type: {class: AllEnemiesTM, ns: , asm: Assembly-CSharp}
       data: 

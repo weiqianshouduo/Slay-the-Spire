@@ -36,7 +36,8 @@ public class DamageSystem : MonoBehaviour
                 }
                 else
                 {
-                    //ÈËÎïËÀÍöÂß¼­
+                    KillHeroGA killHeroGA = new();
+                    ActionSystem.Instance.AddReacion(killHeroGA);
                 }
             }
 
